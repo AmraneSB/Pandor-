@@ -13,7 +13,7 @@ L’utilisateur utilise une **invite vocale ou textuelle** pour rechercher un ti
 - **Frontend** : HTML, CSS, JavaScript  
 - **Backend** : PHP  
 - **Base de données** : MySQL  
-- **Échange de données** : JSON / XML  
+- **Échange de données** : JSON  
 - **Omeka S** : pour la gestion et la récupération des fichiers audio  
 - **Hébergement & versioning** : GitHub  
 
