@@ -63,6 +63,8 @@ erDiagram
 ```
 ## Prompt utilisé pour le diagramme
 
+### Chat OpenAI
+
 J'aurais besoin que tu m'intégre un diagramme "entité relation" correspondand à mon projet fait avec mermaid. 
 Voici mon projet : 
 
