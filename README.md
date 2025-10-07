@@ -59,3 +59,19 @@ erDiagram
     UTILISATEUR ||--o{ SUGGESTION : "propose"
     RECHERCHE }o--|| TITRE : "correspond à"
     SUGGESTION }o--|| TITRE : "peut devenir"
+
+```
+## Prompt utilisé pour le diagramme
+
+J'aurais besoin que tu m'intégre un diagramme "entité relation" correspondand à mon projet fait avec mermaid. 
+Voici mon projet : 
+
+Pandoré (Contraction de Pandore et les notes Do & Ré) 
+Banque de musique 
+
+Pandoré serait une banque de musique en ligne qui a un principe très simple, l’utilisateur utilisera l’invite vocal pour chercher le son d’un titre avec le titre ou un bout du titre et le site lui proposera tous les titres qui s’en rapproche dans ce cas là. 
+
+Par exemple, une personne qui cherchera Walk a Like an Egyptian pourra soit donner le nom complet dans ce cas le site lui donnera directement la musique ou dans le cas contraire proposera tous les titres qui s’en rapproche. 
+Dans le cas où un titre n’est pas disponible, l'utilisateur aura la possibilité de proposer le nom du titre qui pourra être rajouté ultérieurement par le gérant du site. 
+
+Elle sera codée en HTML, CSS, JS utilisant du PHP et une BDD MySQL. Pour le côté donné et multimédia du JSON/XML sera utilisé. Le projet sera stocké sur GitHub. Omeka S sera aussi utilisé notamment pour récupérer l’audio.
