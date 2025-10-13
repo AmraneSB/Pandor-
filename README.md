@@ -6,8 +6,7 @@
 L’utilisateur utilise une **invite vocale ou textuelle** pour rechercher un titre.  
 
 - Si le titre est trouvé → il est affiché directement.  
-- Si une correspondance approximative existe → plusieurs titres proches sont proposés.  
-- Si le titre est introuvable → l’utilisateur peut le **suggérer** afin qu’il soit ajouté ultérieurement par le gérant du site.  
+- Si une correspondance approximative existe → plusieurs titres proches sont proposés.    
 
 ##  Technologies utilisées
 - **Frontend** : HTML, CSS, JavaScript  
@@ -20,8 +19,6 @@ L’utilisateur utilise une **invite vocale ou textuelle** pour rechercher un ti
 ##  Fonctionnalités principales
 - Recherche vocale ou textuelle d’un titre  
 - Affichage des résultats exacts ou proches  
-- Suggestion de nouveaux titres par les utilisateurs  
-- Gestion et validation des titres par l’administrateur  
 
 ##  Modèle de données : Diagramme Entité-Relation
 Voici l’ERD (Entité-Relation) du projet Pandoré :  
