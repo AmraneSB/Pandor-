@@ -53,7 +53,7 @@ erDiagram
     }
 
     UTILISATEUR ||--o{ RECHERCHE : "effectue"
-    UTILISATEUR ||--o{ SUGGESTION : "propose"
+    UTILISATEUR }o--|| SUGGESTION : "propose"
     RECHERCHE }o--|| TITRE : "correspond à"
     SUGGESTION }o--|| TITRE : "peut devenir"
 
