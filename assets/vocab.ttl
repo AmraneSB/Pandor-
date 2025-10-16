@@ -3,7 +3,7 @@
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix pandore: <https://github.com/AmraneSB/Pandor-/assets/vocab#> .
+@prefix pandore: <https://raw.githubusercontent.com/AmraneSB/Pandor-/main/assets/vocab#> .
 
 <https://github.com/AmraneSB/Pandor-/assets/vocab>
     a owl:Ontology ;
@@ -133,4 +133,5 @@ pandore:statutSuggestion a rdf:Property ;
 ####################################################
 # FIN DU VOCABULAIRE
 ####################################################
+
 
