@@ -5,7 +5,8 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix pandore: <https://raw.githubusercontent.com/AmraneSB/Pandor-/main/assets/vocab#> .
 
-<https://github.com/AmraneSB/Pandor-/assets/vocab>
+<https://raw.githubusercontent.com/AmraneSB/Pandor-/main/assets/vocab>
+
     a owl:Ontology ;
     rdfs:label "Vocabulaire Pandoré"@fr ;
     dcterms:creator "Amrane"@fr ;
@@ -133,5 +134,6 @@ pandore:statutSuggestion a rdf:Property ;
 ####################################################
 # FIN DU VOCABULAIRE
 ####################################################
+
 
 
