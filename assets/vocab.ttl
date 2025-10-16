@@ -1,0 +1,135 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix pandore: <https://github.com/tonCompte/pandore/assets/vocab#> .
+
+<https://github.com/tonCompte/pandore/assets/vocab>
+    a owl:Ontology ;
+    rdfs:label "Vocabulaire Pandoré"@fr ;
+    dcterms:creator "Ton Nom"@fr ;
+    dcterms:description "Vocabulaire RDF/Turtle du projet Pandoré — banque de musique en ligne avec recherche vocale et textuelle."@fr ;
+    dcterms:issued "2025-10-14"^^xsd:date ;
+    owl:versionInfo "1.0" .
+
+####################################################
+# CLASSES
+####################################################
+
+pandore:Utilisateur a rdfs:Class ;
+    rdfs:label "Utilisateur"@fr ;
+    rdfs:comment "Personne utilisant le système Pandoré pour rechercher ou écouter de la musique."@fr .
+
+pandore:Titre a rdfs:Class ;
+    rdfs:label "Titre"@fr ;
+    rdfs:comment "Enregistrement musical (chanson, piste, extrait) présent dans la base Pandoré."@fr .
+
+pandore:Artiste a rdfs:Class ;
+    rdfs:label "Artiste"@fr ;
+    rdfs:comment "Personne ou groupe interprétant ou composant un titre."@fr .
+
+pandore:Recherche a rdfs:Class ;
+    rdfs:label "Recherche"@fr ;
+    rdfs:comment "Requête effectuée par un utilisateur via texte ou commande vocale."@fr .
+
+pandore:Suggestion a rdfs:Class ;
+    rdfs:label "Suggestion"@fr ;
+    rdfs:comment "Proposition de titre similaire ou proche retournée après une recherche."@fr .
+
+####################################################
+# PROPRIÉTÉS
+####################################################
+
+# ----- TITRE -----
+pandore:nomTitre a rdf:Property ;
+    rdfs:label "Nom du titre"@fr ;
+    rdfs:domain pandore:Titre ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Nom de la chanson ou de la piste audio."@fr .
+
+pandore:anneeSortie a rdf:Property ;
+    rdfs:label "Année de sortie"@fr ;
+    rdfs:domain pandore:Titre ;
+    rdfs:range xsd:gYear ;
+    rdfs:comment "Année de parution du titre."@fr .
+
+pandore:fichierAudio a rdf:Property ;
+    rdfs:label "Fichier audio"@fr ;
+    rdfs:domain pandore:Titre ;
+    rdfs:range rdfs:Resource ;
+    rdfs:comment "Lien vers le fichier audio ou l’aperçu du titre."@fr .
+
+pandore:aPourArtiste a rdf:Property ;
+    rdfs:label "A pour artiste"@fr ;
+    rdfs:domain pandore:Titre ;
+    rdfs:range pandore:Artiste ;
+    rdfs:comment "Lien entre un titre et son artiste."@fr .
+
+# ----- ARTISTE -----
+pandore:nomArtiste a rdf:Property ;
+    rdfs:label "Nom de l’artiste"@fr ;
+    rdfs:domain pandore:Artiste ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Nom complet ou nom de scène de l’artiste ou du groupe."@fr .
+
+# ----- UTILISATEUR -----
+pandore:nomUtilisateur a rdf:Property ;
+    rdfs:label "Nom de l’utilisateur"@fr ;
+    rdfs:domain pandore:Utilisateur ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Nom ou identifiant de l’utilisateur de Pandoré."@fr .
+
+pandore:emailUtilisateur a rdf:Property ;
+    rdfs:label "Email de l’utilisateur"@fr ;
+    rdfs:domain pandore:Utilisateur ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Adresse email de l’utilisateur."@fr .
+
+pandore:roleUtilisateur a rdf:Property ;
+    rdfs:label "Rôle de l’utilisateur"@fr ;
+    rdfs:domain pandore:Utilisateur ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Rôle ou statut (admin, étudiant, etc.)."@fr .
+
+pandore:effectueRecherche a rdf:Property ;
+    rdfs:label "Effectue la recherche"@fr ;
+    rdfs:domain pandore:Utilisateur ;
+    rdfs:range pandore:Recherche ;
+    rdfs:comment "Lien entre un utilisateur et la recherche qu’il a effectuée."@fr .
+
+# ----- RECHERCHE -----
+pandore:motCle a rdf:Property ;
+    rdfs:label "Mot-clé"@fr ;
+    rdfs:domain pandore:Recherche ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Mot ou expression saisie ou prononcée par l’utilisateur."@fr .
+
+pandore:dateRecherche a rdf:Property ;
+    rdfs:label "Date de la recherche"@fr ;
+    rdfs:domain pandore:Recherche ;
+    rdfs:range xsd:dateTime ;
+    rdfs:comment "Horodatage de la requête de recherche."@fr .
+
+pandore:correspondATitre a rdf:Property ;
+    rdfs:label "Correspond à un titre"@fr ;
+    rdfs:domain pandore:Recherche ;
+    rdfs:range pandore:Titre ;
+    rdfs:comment "Lien entre une recherche et le titre trouvé."@fr .
+
+# ----- SUGGESTION -----
+pandore:nomTitrePropose a rdf:Property ;
+    rdfs:label "Nom du titre proposé"@fr ;
+    rdfs:domain pandore:Suggestion ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Titre alternatif ou suggestion proposée à l’utilisateur."@fr .
+
+pandore:statutSuggestion a rdf:Property ;
+    rdfs:label "Statut de la suggestion"@fr ;
+    rdfs:domain pandore:Suggestion ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "Indique si la suggestion a été acceptée, ignorée, etc."@fr .
+
+####################################################
+# FIN DU VOCABULAIRE
+####################################################
