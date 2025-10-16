@@ -1,0 +1,59 @@
+{
+    "o:label": "Utilisateur",
+    "o:resource_template_property": [
+        {
+            "o:alternate_label": null,
+            "o:alternate_comment": null,
+            "o:is_required": false,
+            "o:is_private": false,
+            "o:default_lang": null,
+            "data_types": [],
+            "vocabulary_namespace_uri": "https:\/\/raw.githubusercontent.com\/AmraneSB\/Pandor-\/main\/assets\/vocab#",
+            "vocabulary_label": "Vocabulaire Pandor\u00e9",
+            "local_name": "nomUtilisateur",
+            "label": "Nom de l\u2019utilisateur"
+        },
+        {
+            "o:alternate_label": null,
+            "o:alternate_comment": null,
+            "o:is_required": false,
+            "o:is_private": false,
+            "o:default_lang": null,
+            "data_types": [],
+            "vocabulary_namespace_uri": "https:\/\/raw.githubusercontent.com\/AmraneSB\/Pandor-\/main\/assets\/vocab#",
+            "vocabulary_label": "Vocabulaire Pandor\u00e9",
+            "local_name": "emailUtilisateur",
+            "label": "Email de l\u2019utilisateur"
+        },
+        {
+            "o:alternate_label": null,
+            "o:alternate_comment": null,
+            "o:is_required": false,
+            "o:is_private": false,
+            "o:default_lang": null,
+            "data_types": [],
+            "vocabulary_namespace_uri": "https:\/\/raw.githubusercontent.com\/AmraneSB\/Pandor-\/main\/assets\/vocab#",
+            "vocabulary_label": "Vocabulaire Pandor\u00e9",
+            "local_name": "roleUtilisateur",
+            "label": "R\u00f4le de l\u2019utilisateur"
+        },
+        {
+            "o:alternate_label": null,
+            "o:alternate_comment": null,
+            "o:is_required": false,
+            "o:is_private": false,
+            "o:default_lang": null,
+            "data_types": [],
+            "vocabulary_namespace_uri": "https:\/\/raw.githubusercontent.com\/AmraneSB\/Pandor-\/main\/assets\/vocab#",
+            "vocabulary_label": "Vocabulaire Pandor\u00e9",
+            "local_name": "effectueRecherche",
+            "label": "Effectue la recherche"
+        }
+    ],
+    "o:resource_class": {
+        "vocabulary_namespace_uri": "https:\/\/raw.githubusercontent.com\/AmraneSB\/Pandor-\/main\/assets\/vocab#",
+        "vocabulary_label": "Vocabulaire Pandor\u00e9",
+        "local_name": "Utilisateur",
+        "label": "Utilisateur"
+    }
+}
