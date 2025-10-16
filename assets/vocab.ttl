@@ -3,12 +3,12 @@
 @prefix owl:   <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix pandore: <https://github.com/tonCompte/pandore/assets/vocab#> .
+@prefix pandore: <https://github.com/AmraneSB/Pandor-/assets/vocab#> .
 
-<https://github.com/tonCompte/pandore/assets/vocab>
+<https://github.com/AmraneSB/Pandor-/assets/vocab>
     a owl:Ontology ;
     rdfs:label "Vocabulaire Pandoré"@fr ;
-    dcterms:creator "Ton Nom"@fr ;
+    dcterms:creator "Amrane"@fr ;
     dcterms:description "Vocabulaire RDF/Turtle du projet Pandoré — banque de musique en ligne avec recherche vocale et textuelle."@fr ;
     dcterms:issued "2025-10-14"^^xsd:date ;
     owl:versionInfo "1.0" .
@@ -133,3 +133,4 @@ pandore:statutSuggestion a rdf:Property ;
 ####################################################
 # FIN DU VOCABULAIRE
 ####################################################
+
