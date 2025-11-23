@@ -2,178 +2,189 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>API Omeka S — Enregistrement audio + upload</title>
+  <title>API Omeka S - Création Item + Upload Média</title>
   <style>
-    button { margin: 6px 4px; }
-    pre { background:#f5f5f5; padding:10px; white-space:pre-wrap; }
+    body { font-family: Arial, sans-serif; padding: 18px; }
+    pre { background:#f5f5f5; padding:8px; white-space:pre-wrap; }
+    .row { margin-bottom:12px; }
+    label { margin-right:8px; }
+    input[type="text"] { padding:4px; }
+    button { margin-left:6px; }
   </style>
 </head>
 <body>
-  <h1>Enregistrer la voix et envoyer vers Omeka S</h1>
+  <h1>Omeka S — créer item & uploader média</h1>
 
+  <!-- ================== LIRE ITEMS ================== -->
   <section>
-    <h2>Enregistrement</h2>
-    <label>Nom de l’artiste / titre de l'enregistrement :</label>
-    <input id="nomArtiste" type="text" placeholder="Ex : Nougaro" />
-    <div>
-      <button id="btnStart">Démarrer l'enregistrement</button>
-      <button id="btnStop" disabled>Arrêter</button>
-      <button id="btnUpload" disabled>Envoyer à Omeka</button>
+    <h2>1) Lire les items</h2>
+    <div class="row">
+      <button id="btnGet">Afficher les items</button>
     </div>
-
-    <div>
-      <p>Durée / statut : <span id="status">—</span></p>
-      <audio id="player" controls style="display:none"></audio>
-    </div>
-
-    <pre id="log">Logs : aucun</pre>
+    <pre id="resultat"></pre>
   </section>
 
-  <script>
-    // ==== CONFIG ====
-    const baseURL = "http://localhost/omk_thyp_25-26_clone/omeka-s/api/items";
-    const key_identity = "v93tumeJwroU6cKf7hkIDjgVr5FFZHBn";
-    const key_credential = "1xPr6ZPSgnawyRLJwPKB5m6MejBU4xEg";
-    // Resource template 
-    const RESOURCE_TEMPLATE_ID = 7; 
-    const RESOURCE_CLASS_ID = 108;  
-    // propriété id pour "dcterms:title" 
-    const PROP_TITLE_ID = 1;
-    const PROP_NOMARTISTE_ID = 189;
+  <!-- ================== CREER ITEM ================== -->
+  <section>
+    <h2>2) Créer un item (titre obligatoire)</h2>
+    <form id="formCreate">
+      <label>Titre : <input type="text" id="title" required></label>
+      <label style="margin-left:12px">Description : <input type="text" id="desc"></label>
+      <button type="submit">Créer item</button>
+    </form>
+    <pre id="createResult"></pre>
+  </section>
 
-    // ==== UI refs ====
-    const btnStart = document.getElementById("btnStart");
-    const btnStop = document.getElementById("btnStop");
-    const btnUpload = document.getElementById("btnUpload");
-    const statusEl = document.getElementById("status");
-    const player = document.getElementById("player");
-    const logEl = document.getElementById("log");
-    const inputNom = document.getElementById("nomArtiste");
+  <!-- ================== UPLOAD MEDIA ================== -->
+  <section>
+    <h2>3) Uploader un média vers l'item (image / audio)</h2>
+    <div class="row">
+      <label>Choisir un fichier (image/audio): <input type="file" id="fileInput"></label>
+      <button id="btnUploadFile">Uploader le fichier vers l'item créé</button>
+    </div>
 
-    let mediaRecorder;
-    let audioChunks = [];
-    let audioBlob; 
+    <pre id="uploadResult"></pre>
+  </section>
 
-    function log(msg) {
-      const t = new Date().toLocaleTimeString();
-      logEl.textContent = `[${t}] ${msg}\n` + logEl.textContent;
+<script>
+/* ====================== CONFIG ====================== */
+const baseURL = "http://localhost/omk_thyp_25-26_clone/omeka-s/api/items";
+const key_identity = "v93tumeJwroU6cKf7hkIDjgVr5FFZHBn";
+const key_credential = "1xPr6ZPSgnawyRLJwPKB5m6MejBU4xEg";
+
+// Media endpoint
+const mediaURL = baseURL.replace("/items", "/media");
+
+// Helper
+function urlWithKeys(url) {
+  const sep = url.includes("?") ? "&" : "?";
+  return `${url}${sep}key_identity=${encodeURIComponent(key_identity)}&key_credential=${encodeURIComponent(key_credential)}`;
+}
+
+/* ====================== LECTURE ITEMS ====================== */
+document.getElementById("btnGet").addEventListener("click", async () => {
+  const target = document.getElementById("resultat");
+  target.textContent = "Chargement...";
+  try {
+    const res = await fetch(urlWithKeys(baseURL));
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const data = await res.json();
+    let txt = "";
+    data.forEach(item => {
+      txt += `#${item["o:id"]} — ${item["o:title"] || "(sans titre)"}\n`;
+    });
+    target.textContent = txt;
+  } catch (e) {
+    target.textContent = "Erreur : " + e.message;
+  }
+});
+
+/* ====================== CREATION ITEM ====================== */
+document.getElementById("formCreate").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+
+  const title = document.getElementById("title").value.trim();
+  const desc  = document.getElementById("desc").value.trim();
+
+  if (!title) return alert("Titre requis");
+
+  const newItem = {
+    "o:is_public": true,
+    "dcterms:title": [
+      { "type": "literal", "property_id": "auto", "@value": title }
+    ]
+  };
+
+  if (desc) {
+    newItem["dcterms:description"] = [
+      { "type": "literal", "property_id": "auto", "@value": desc }
+    ];
+  }
+
+  const out = document.getElementById("createResult");
+  out.textContent = "Création...";
+
+  try {
+    const r = await fetch(urlWithKeys(baseURL), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newItem)
+    });
+
+    const text = await r.text();
+    let json;
+    try { json = JSON.parse(text); }
+    catch { json = text; }
+
+    if (!r.ok) {
+      out.textContent = "❌ Erreur création : " + JSON.stringify(json);
+      return;
     }
 
-    // Demande d'autorisation et démarrage
-    btnStart.addEventListener("click", async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        audioChunks = [];
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.ondataavailable = e => {
-          if (e.data && e.data.size > 0) audioChunks.push(e.data);
-        };
-        mediaRecorder.onstart = () => {
-          statusEl.textContent = "Enregistrement…";
-          btnStart.disabled = true;
-          btnStop.disabled = false;
-          btnUpload.disabled = true;
-          log("Enregistrement démarré");
-        };
-        mediaRecorder.onstop = () => {
-          audioBlob = new Blob(audioChunks, { type: 'audio/webm' }); // format webm/container
-          const url = URL.createObjectURL(audioBlob);
-          player.src = url;
-          player.style.display = "block";
-          btnStart.disabled = false;
-          btnStop.disabled = true;
-          btnUpload.disabled = false;
-          statusEl.textContent = "Enregistrement arrêté (prêt à envoyer)";
-          log("Enregistrement arrêté et blob créé (" + (audioBlob.size/1024).toFixed(1) + " KB)");
-        };
-        mediaRecorder.start();
-      } catch (err) {
-        log("Erreur getUserMedia : " + err.message);
-        statusEl.textContent = "Erreur d'accès au micro";
-      }
+    out.textContent = "✅ Item créé :\n" + JSON.stringify(json, null, 2);
+
+    // extraction ID
+    let id = json["o:id"];
+    if (!id && json["@id"]) {
+      const m = /\/items\/(\d+)$/.exec(json["@id"]);
+      if (m) id = parseInt(m[1], 10);
+    }
+
+    window.lastCreatedItem = id;
+    out.textContent += "\nID: " + id;
+
+  } catch (err) {
+    out.textContent = "❌ Erreur fetch : " + err;
+  }
+});
+
+/* ====================== UPLOAD MEDIA ====================== */
+async function uploadFileToItem(file, itemId) {
+  const out = document.getElementById("uploadResult");
+
+  if (!file) return alert("Choisis un fichier");
+  if (!itemId) return alert("Crée un item d'abord");
+
+  out.textContent = "Upload en cours...";
+  console.log("Upload file →", file);
+
+  const fd = new FormData();
+  fd.append("file", file, file.name);  // FONDAMENTAL
+  fd.append("o:item", String(itemId)); // PAS DE JSON !
+  fd.append("o:ingester", "upload");
+
+  try {
+    const r = await fetch(urlWithKeys(mediaURL), {
+      method: "POST",
+      body: fd
     });
 
-    // Arrêt
-    btnStop.addEventListener("click", () => {
-      if (mediaRecorder && mediaRecorder.state === "recording") {
-        mediaRecorder.stop();
-        statusEl.textContent = "Arrêt en cours...";
-      }
-    });
+    const text = await r.text();
+    let parsed;
+    try { parsed = JSON.parse(text); }
+    catch { parsed = text; }
 
-    // Upload vers Omeka : crée d'abord l'item (POST multipart/form-data avec data + file[0])
-    btnUpload.addEventListener("click", async () => {
-      if (!audioBlob) {
-        log("Aucun enregistrement à envoyer.");
-        return;
-      }
-      const nom = (inputNom.value || "").trim();
-      if (!nom) {
-        alert("Donne un nom / titre avant d'envoyer.");
-        return;
-      }
+    console.log("Réponse upload :", r.status, parsed);
 
-      btnUpload.disabled = true;
-      statusEl.textContent = "Envoi en cours...";
-      log("Préparation de l'envoi...");
+    if (!r.ok) {
+      out.textContent = "❌ Erreur upload : " + JSON.stringify(parsed);
+      return;
+    }
 
-      // Prépare les métadonnées pour Omeka (o:title + propriétés)
-      const metadata = {
-        "o:resource_template": { "o:id": RESOURCE_TEMPLATE_ID },
-        "o:resource_class": { "o:id": RESOURCE_CLASS_ID },
-        "o:is_public": true,
-        "o:title": nom,
-        "o:properties": {}
-      };
+    out.textContent = "✅ Upload OK :\n" + JSON.stringify(parsed, null, 2);
 
-      // Ajoute la propriété dcterms:title (1) et la propriété spécifique (189) 
-      metadata["o:properties"][String(PROP_TITLE_ID)] = [
-        { "@value": nom, "type": "literal", "@language": "fr" }
-      ];
-      metadata["o:properties"][String(PROP_NOMARTISTE_ID)] = [
-        { "@value": nom, "type": "literal", "@language": "fr" }
-      ];
+  } catch (e) {
+    out.textContent = "❌ Erreur fetch : " + e;
+  }
+}
 
-      // Construis FormData : "data" = JSON, "file[0]" = audio blob
-      const fd = new FormData();
-      fd.append("data", JSON.stringify(metadata));
+document.getElementById("btnUploadFile").addEventListener("click", async () => {
+  const f = document.getElementById("fileInput").files[0];
+  const id = window.lastCreatedItem;
+  uploadFileToItem(f, id);
+});
+</script>
 
-      // Nom de fichier 
-      const filename = nom.replace(/\s+/g, "_") + ".webm";
-      fd.append("file[0]", audioBlob, filename);
-
-      // Envoi 
-      const url = `${baseURL}?key_identity=${encodeURIComponent(key_identity)}&key_credential=${encodeURIComponent(key_credential)}`;
-
-      try {
-        log("Envoi POST -> " + url);
-        const resp = await fetch(url, {
-          method: "POST",
-          body: fd,
-        });
-
-        // Debug : récupère texte si erreur
-        if (!resp.ok) {
-          const text = await resp.text();
-          log("Réponse non OK : " + resp.status + " — " + text);
-          statusEl.textContent = "Erreur lors de l'envoi (" + resp.status + ")";
-          btnUpload.disabled = false;
-          return;
-        }
-
-        const json = await resp.json();
-        log("Upload réussi. Réponse : " + JSON.stringify(json));
-        statusEl.textContent = "Upload OK — item créé";
-        // montre le résultat
-        alert("Upload réussi — item créé. Vérifie Omeka.");
-      } catch (err) {
-        log("Erreur fetch/upload : " + err.message);
-        statusEl.textContent = "Erreur réseau / API";
-      } finally {
-        btnUpload.disabled = false;
-      }
-    });
-  </script>
 </body>
 </html>
-
