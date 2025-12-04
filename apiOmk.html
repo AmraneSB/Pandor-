@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>API Omeka S - Création Item + Upload Média</title>
+  <title>Projet Pandore</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 18px; }
     pre { background:#f5f5f5; padding:8px; white-space:pre-wrap; }
@@ -10,14 +10,23 @@
     label { margin-right:8px; }
     input[type="text"] { padding:4px; }
     button { margin-left:6px; }
+
+    
+    #iframePandore {
+      margin-top: 40px;
+      width: 100%;
+      height: 900px; 
+      border: 2px solid #333;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
-  <h1>Omeka S — créer item & uploader média</h1>
+  <h1>Projet Pandore</h1>
 
   <!-- ================== LIRE ITEMS ================== -->
   <section>
-    <h2>1) Lire les items</h2>
+    <h2> Lecture des items</h2>
     <div class="row">
       <button id="btnGet">Afficher les items</button>
     </div>
@@ -26,7 +35,7 @@
 
   <!-- ================== CREER ITEM ================== -->
   <section>
-    <h2>2) Créer un item (titre obligatoire)</h2>
+    <h2> Création d'item (titre obligatoire)</h2>
     <form id="formCreate">
       <label>Titre : <input type="text" id="title" required></label>
       <label style="margin-left:12px">Description : <input type="text" id="desc"></label>
@@ -37,7 +46,7 @@
 
   <!-- ================== UPLOAD MEDIA ================== -->
   <section>
-    <h2>3) Uploader un média vers l'item (image / audio)</h2>
+    <h2> Uploader de média vers l'item (image / audio)</h2>
     <div class="row">
       <label>Choisir un fichier (image/audio): <input type="file" id="fileInput"></label>
       <button id="btnUploadFile">Uploader le fichier vers l'item créé</button>
@@ -48,7 +57,7 @@
 
 <script>
 /* ====================== CONFIG ====================== */
-const baseURL = "http://localhost/omk_thyp_25-26_clone/api/items";
+const baseURL = "http://localhost/omk_thyp_25-26_clone/omeka-s/api/items";
 const key_identity = "v93tumeJwroU6cKf7hkIDjgVr5FFZHBn";
 const key_credential = "1xPr6ZPSgnawyRLJwPKB5m6MejBU4xEg";
 
@@ -147,11 +156,10 @@ async function uploadFileToItem(file, itemId) {
   if (!itemId) return alert("Crée un item d'abord");
 
   out.textContent = "Upload en cours...";
-  console.log("Upload file →", file);
 
   const fd = new FormData();
-  fd.append("file", file, file.name);  // FONDAMENTAL
-  fd.append("o:item", String(itemId)); // PAS DE JSON !
+  fd.append("file", file, file.name);
+  fd.append("o:item", String(itemId));
   fd.append("o:ingester", "upload");
 
   try {
@@ -164,8 +172,6 @@ async function uploadFileToItem(file, itemId) {
     let parsed;
     try { parsed = JSON.parse(text); }
     catch { parsed = text; }
-
-    console.log("Réponse upload :", r.status, parsed);
 
     if (!r.ok) {
       out.textContent = "❌ Erreur upload : " + JSON.stringify(parsed);
@@ -186,6 +192,13 @@ document.getElementById("btnUploadFile").addEventListener("click", async () => {
 });
 </script>
 
+<!-- ===================== IFRAME PANDORE ===================== -->
+<h2> Module Pandore</h2>
+
+<iframe 
+    id="iframePandore"
+    src="http://localhost/omk_thyp_25-26_clone/admin/pandore">
+</iframe>
+
 </body>
 </html>
-
