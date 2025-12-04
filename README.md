@@ -1,76 +1,101 @@
-#  Pandoré  
-*(Contraction de Pandore et les notes Do & Ré)*  
+# Pandore  
+#### (Recherche multimédia : Omeka S + Wikidata + Spotify)
 
-##  Description du projet
-**Pandoré** est une **banque de musique en ligne** avec un principe simple :  
-L’utilisateur utilise une **invite vocale ou textuelle** pour rechercher un titre.  
+Pandore est un module conçu pour Omeka S permettant d’effectuer une recherche unifiée dans plusieurs sources :
 
-- Si le titre est trouvé → il est affiché directement.  
-- Si une correspondance approximative existe → plusieurs titres proches sont proposés.    
+- **Omeka S** : recherche dans les items existants  
+- **Wikidata** : récupération d’informations, images et fichiers audio libres de droits  
+- **Spotify** : affichage légal d’extraits officiels via un iframe embed  
 
-##  Technologies utilisées
-- **Frontend** : HTML, CSS, JavaScript  
-- **Backend** : PHP  
-- **Base de données** : MySQL  
-- **Échange de données** : JSON  
-- **Omeka S** : pour la gestion et la récupération des fichiers audio  
-- **Hébergement & versioning** : GitHub  
+Il inclut également une **API HTML externe (apiOmk.html)** permettant :
+- de lire les items Omeka S  
+- de créer un item  
+- d’uploader un média lié à cet item  
+- d’afficher le module Pandore dans un *iframe* en bas de page.
+
+---
 
 ##  Fonctionnalités principales
-- Recherche vocale ou textuelle d’un titre  
-- Affichage des résultats exacts ou proches  
+
+###  1. Recherche centralisée
+L'utilisateur saisit un nom (artiste, œuvre, personnage…).  
+Le module interroge automatiquement :
+
+| Source | Type de résultats |
+|-------|-------------------|
+| **Omeka S** | Items internes |
+| **Wikidata** | Label, description, images (P18), audios libres (P85) |
+| **Spotify** | Extraits musicaux officiels en iframe |
+
+Toutes les données sont affichées proprement dans `index.phtml`.
+
+---
+
+##  2. API externe (apiOmk.html)
+
+Cette page HTML incluse dans le module permet via JavaScript natif :
+
+- d’afficher les items Omeka S  
+- de créer des items  
+- d’uploader des images ou fichiers audio  
+- **d’embarquer l’interface du module Pandore dans un iframe**
+
+Elle sert d’outil externe simple pour tester l’API native d’Omeka S.
+
+---
 
 ##  Modèle de données : Diagramme Entité-Relation
-Voici l’ERD (Entité-Relation) du projet Pandoré :  
 
-```mermaid
 erDiagram
-    UTILISATEUR {
-        int idUtilisateur PK
-        string nom
-        string email
-        string role
-    }
 
-    TITRE {
-        int idTitre PK
-        string nomTitre
-        string artiste
-        int annee
-        string fichierAudio
-    }
+    RECHERCHE ||--o{ OMEKA_ITEM : "retourne"
+    RECHERCHE ||--o{ WIKIDATA_ENTITY : "retourne"
+    RECHERCHE ||--o{ SPOTIFY_RESULT : "retourne"
+
+    OMEKA_ITEM ||--o{ OMEKA_MEDIA : "contient"
+    
+    WIKIDATA_ENTITY ||--o{ WIKIDATA_IMAGE : "images libres"
+    WIKIDATA_ENTITY ||--o{ WIKIDATA_AUDIO : "audios libres"
+
+    SPOTIFY_RESULT ||--o{ SPOTIFY_EMBED : "extraits officiels"
 
     RECHERCHE {
-        int idRecherche PK
-        string motCle
-        date dateRecherche
+        string query
+        datetime date
     }
 
-    SUGGESTION {
-        int idSuggestion PK
-        string nomTitrePropose
-        string statut
+    OMEKA_ITEM {
+        int id
+        string title
+        string description
     }
 
-    UTILISATEUR ||--o{ RECHERCHE : "effectue"
-    UTILISATEUR }o--|| SUGGESTION : "propose"
-    RECHERCHE }o--|| TITRE : "correspond à"
-    SUGGESTION }o--|| TITRE : "peut devenir"
+    OMEKA_MEDIA {
+        int id
+        string type
+        string url
+    }
 
-```
-## Prompt utilisé pour le diagramme
+    WIKIDATA_ENTITY {
+        string qid
+        string label
+        string description
+    }
 
-### Chat OpenAI
+    WIKIDATA_IMAGE {
+        string url
+    }
 
-J'aurais besoin que tu m'intégre un diagramme "entité relation" correspondand à mon projet fait avec mermaid. 
-Voici mon projet : 
+    WIKIDATA_AUDIO {
+        string url
+    }
 
-Pandoré (Contraction de Pandore et les notes Do & Ré) 
-Banque de musique 
+    SPOTIFY_RESULT {
+        string name
+    }
 
-Pandoré serait une banque de musique en ligne qui a un principe très simple, l’utilisateur utilisera l’invite vocal pour chercher le son d’un titre avec le titre ou un bout du titre et le site lui proposera tous les titres qui s’en rapproche dans ce cas là. 
+    SPOTIFY_EMBED {
+        string url
+    }
 
-Par exemple, une personne qui cherchera Walk a Like an Egyptian pourra soit donner le nom complet dans ce cas le site lui donnera directement la musique ou dans le cas contraire proposera tous les titres qui s’en rapproche. 
-Dans le cas où un titre n’est pas disponible, l'utilisateur aura la possibilité de proposer le nom du titre qui pourra être rajouté ultérieurement par le gérant du site. 
 
-Elle sera codée en HTML, CSS, JS utilisant du PHP et une BDD MySQL. Pour le côté donné et multimédia du JSON/XML sera utilisé. Le projet sera stocké sur GitHub. Omeka S sera aussi utilisé notamment pour récupérer l’audio.
