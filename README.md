@@ -55,6 +55,7 @@ erDiagram
     RECHERCHE ||--o{ OMEKA_ITEM : retourne
     RECHERCHE ||--o{ WIKIDATA_ENTITY : retourne
     RECHERCHE ||--o{ SPOTIFY_RESULT : retourne
+    RECHERCHE ||--o{ JAMENDO_RESULT : retourne
 
     OMEKA_ITEM ||--o{ OMEKA_MEDIA : contient
 
@@ -62,6 +63,8 @@ erDiagram
     WIKIDATA_ENTITY ||--o{ WIKIDATA_AUDIO : "audios libres"
 
     SPOTIFY_RESULT ||--o{ SPOTIFY_EMBED : "extraits officiels"
+
+    JAMENDO_RESULT ||--o{ JAMENDO_EMBED : "extraits non officiels"
 
     RECHERCHE {
       STRING query
@@ -102,6 +105,13 @@ erDiagram
       STRING url
     }
 
+    JAMENDO_RESULT {
+      STRING name
+    }
+
+    JAMENDO_EMBED {
+      STRING url
+    }
 ```
 ## Prompt utilisé pour le diagramme
 
