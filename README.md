@@ -1,11 +1,12 @@
 # Pandoré  
-#### (Recherche multimédia : Omeka S + Wikidata + Spotify)
+#### (Recherche multimédia : Omeka S + Wikidata + Spotify + Jamendo)
 
 Pandoré est un module conçu pour Omeka S permettant d’effectuer une recherche unifiée dans plusieurs sources :
 
 - **Omeka S** : recherche dans les items existants  
 - **Wikidata** : récupération d’informations, images et fichiers audio libres de droits  
-- **Spotify** : affichage légal d’extraits officiels via un iframe embed  
+- **Spotify** : affichage légal d’extraits officiels via un iframe embed
+- **Jamendo** : affichage non officiels des extraits (avec possibilité de les téléchargés)  
 
 Il inclut également une **API HTML externe (apiOmk.html)** permettant :
 - de lire les items Omeka S  
@@ -26,6 +27,7 @@ Le module interroge automatiquement :
 | **Omeka S** | Items internes |
 | **Wikidata** | Label, description, images (P18), audios libres (P85) |
 | **Spotify** | Extraits musicaux officiels en iframe |
+| **Jamendo** | Extraits musicaux non officiels |
 
 Toutes les données sont affichées proprement dans `index.phtml`.
 
@@ -116,6 +118,7 @@ Pandore est un module conçu pour Omeka S permettant d’effectuer une recherche
 - Omeka S : recherche dans les items existants  
 - Wikidata : récupération d’informations, images et fichiers audio libres de droits  
 - Spotify : affichage légal d’extraits officiels via un iframe embed  
+- Jamendo : affichage non officiels des extraits (avec possibilité de les téléchargés)  
 
 Il inclut également une API HTML externe (apiOmk.html) permettant :
 - de lire les items Omeka S  
